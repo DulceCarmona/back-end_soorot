@@ -11,7 +11,7 @@ INSERT INTO productos VALUES (null, "Mosquetón con seguro", 349, "Mosquetón co
 INSERT INTO productos VALUES (null, "Casco", 1299, "Casco resistente para proteger tu cabeza en todo momento.", "escalada", "https://m.media-amazon.com/images/I/61zWMe28UlL._AC_SL1500_.jpg");
 INSERT INTO productos VALUES (null, "Gatas", 2199, "Zapatos de precisión y comodidad para escalar mejor.", "escalada", "https://contents.mediadecathlon.com/p2613846/1cr1/k$e33abc7dddd7a50e86c3b848a927624e/gatas-escalada-gris-cometa.jpg?format=auto&f=768x0");
 
-
+ INSERT INTO ordenes VALUES (null,"2025/05/03",4000,[1,2],4);
 
 
 SELECT * FROM usuarios;

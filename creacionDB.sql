@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `soorotDB`.`ordenes` (
   `ordenId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `fechaOrden` DATE NOT NULL,
   `importe` INT UNSIGNED NOT NULL,
-  `productosId` VARCHAR(45) NOT NULL,
+  `productosId` INT NOT NULL,
   `usuarioId` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`ordenId`, `usuarioId`),
   UNIQUE INDEX `ordenId_UNIQUE` (`ordenId` ASC) VISIBLE,
