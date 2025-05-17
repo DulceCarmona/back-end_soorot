@@ -48,8 +48,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `soorotDB`.`ordenes` (
   `ordenId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `fechaOrden` DATE NOT NULL,
-  `importe` INT UNSIGNED NOT NULL,
-  `productosId` INT NOT NULL,
+  `importe` DOUBLE UNSIGNED NOT NULL,
   `usuarioId` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`ordenId`, `usuarioId`),
   UNIQUE INDEX `ordenId_UNIQUE` (`ordenId` ASC) VISIBLE,
@@ -57,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `soorotDB`.`ordenes` (
   CONSTRAINT `fk_ordenes_usuarios1`
     FOREIGN KEY (`usuarioId`)
     REFERENCES `soorotDB`.`usuarios` (`usuarioId`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -68,19 +67,20 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `soorotDB`.`ordenes_has_productos` (
   `ordenId` INT UNSIGNED NOT NULL,
   `productoId` INT ZEROFILL UNSIGNED NOT NULL,
+  `cantidad` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`ordenId`, `productoId`),
   INDEX `fk_ordenes_has_productos_productos1_idx` (`productoId` ASC) VISIBLE,
   INDEX `fk_ordenes_has_productos_ordenes1_idx` (`ordenId` ASC) VISIBLE,
   CONSTRAINT `fk_ordenes_has_productos_ordenes1`
     FOREIGN KEY (`ordenId`)
     REFERENCES `soorotDB`.`ordenes` (`ordenId`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_ordenes_has_productos_productos1`
     FOREIGN KEY (`productoId`)
     REFERENCES `soorotDB`.`productos` (`productoId`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
