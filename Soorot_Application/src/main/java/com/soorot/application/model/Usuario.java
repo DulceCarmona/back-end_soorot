@@ -1,20 +1,36 @@
 package com.soorot.application.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity  //indica que va a ser una entidad de la base de datos
+@Table(name="usuarios")  //cambia el nombre de Usuarios a usuario en u minuscula
+
 public class Usuario {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(unique = true, nullable = false)
 	private Long id;
+	@Column(nullable = false)
 	private String nombre;
+	@Column(nullable = false)
 	private String email;
+	@Column(nullable = false)
 	private String password;
+	@Column(nullable = false)
 	private String telefono;
-	private static Long total = Long.valueOf(0);
+	
 	//Constructor
 	public Usuario(String nombre, String email, String password, String telefono) {
 		this.nombre = nombre;
 		this.email = email;
 		this.password = password;
 		this.telefono = telefono;
-		Usuario.total++;
-		this.id = Usuario.total;
+		
 	}//Constructor Usuarios	
 		//Constructor vacío
 		public Usuario() {}
@@ -54,13 +70,5 @@ public class Usuario {
 			return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email + ", password=" + password
 					+ ", telefono=" + telefono + "]";
 		}
-		
-		
-	
-	
-	
-	
-	
-	
 	
 }//class Usuarios

@@ -1,71 +1,84 @@
 package com.soorot.application.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.soorot.application.dto.ChangePassword;
 import com.soorot.application.model.Usuario;
+import com.soorot.application.repository.UsuariosRepository;
 
 @Service
 public class UsuariosService {
-	private final List<Usuario> lista = new ArrayList<Usuario>();
 	
 	@Autowired
-	public UsuariosService() {
-		lista.add(new Usuario("Dulce Carmona", "eclud_car_95@gmail.com", "Casd950825MDFRNL/09", "2381015478"));
-		lista.add(new Usuario("Emilio Muñoz", "mrhemilio@outlook.com", "HotdogCostco$45", "5585248455"));
-		lista.add(new Usuario("Fernando Bartolome", "fbartolomem.98@gmail.com", "Suki0712$", "5610921190"));
-		lista.add(new Usuario("Uriel Medina", "urielmedina@ciencias.unam.mx", "Nabopo12.", "5613129854"));
-		lista.add(new Usuario("Eduardo Esteva Sarralde", "eestevass@gmail.com", "Enero2001#", "5519135105"));
+    private PasswordEncoder encoder;
+	
+	private final UsuariosRepository usuariosRepository;
+	@Autowired
+	public UsuariosService(UsuariosRepository usuariosRepository) { 
+	    this.usuariosRepository = usuariosRepository;
 	}// Constructor
+
 	
 	public List<Usuario> getUsuarios(){
-		return lista;
+		return usuariosRepository.findAll();
 	}//getUsuarios
-
+	
 	public Usuario getUsuario(Long id) {
-		Usuario tmp = null;
-		for (Usuario usuario : lista) {
-			if(usuario.getId()==id) {
-				tmp = usuario;
-				break;
-			}//if
-		}//foreach
-		return tmp;
+		return usuariosRepository.findById(id).orElseThrow(
+				() -> new IllegalArgumentException("El usuario "
+						+ "con el id[" + id
+						+ "] no existe."));  //mensaje solo para la consola	
 	}//getUsuario
 
 	public Usuario deleteUsuario(Long id) {
 		Usuario tmp = null;
-		for (Usuario usuario : lista) {
-			if(usuario.getId()==id) {
-				tmp = usuario;
-				lista.remove(usuario);
-				break;
-			}//if
-		}//foreach
+		if (usuariosRepository.existsById(id)) {
+			tmp = usuariosRepository.findById(id).get();
+			usuariosRepository.deleteById(id);
+		}// if exists
 		return tmp;
 	}//deleteUsuario
 
 	public Usuario addUsuario(Usuario usuario) {
-		lista.add(usuario);
-		return usuario;
+		Optional<Usuario> usu = usuariosRepository.findByEmail(usuario.getEmail());
+		if(usu.isEmpty()) {
+			usuario.setPassword(encoder.encode(usuario.getPassword()));
+			return usuariosRepository.save(usuario);
+		}else  {
+			return null;
+		}//isEmpty
 	}//addUsuario
-	
-	public Usuario updateUsuario(Long id, String nombre, String email, String password, String telefono) {
-		Usuario tmp = null;
-		for (Usuario usuario : lista) {
-			if(usuario.getId()==id) {
-				if(nombre!=null) usuario.setNombre(nombre);
-				if(email!=null) usuario.setEmail(email);
-				if(password!=null) usuario.setPassword(password);
-				if(telefono!=null) usuario.setTelefono(telefono);
-				tmp = usuario;
-				break;
-			}//if
-		}//foreach
-		return tmp;
+
+	public boolean validateUser(Usuario usuario) {
+		Optional<Usuario> user = usuariosRepository.findByEmail(usuario.getEmail());
+			if(user.isPresent()) {
+				Usuario tmp = user.get();
+				if(encoder.matches(usuario.getPassword(), tmp.getPassword())) {
+					return true;
+				}//if matches
+			}//if isPresent
+			return false;
+	}//validateUser
+
+	public Usuario updateUsuario(Long id, ChangePassword changePassword) {
+		Usuario user = null;
+		if (usuariosRepository.existsById(id)) {
+			user = usuariosRepository.findById(id).get();
+			//if(user.getPassword().equals(changePassword.getPassword())) {
+			if (encoder.matches(changePassword.getPassword(), user.getPassword())) {
+				user.setPassword(encoder.encode (changePassword.getNpassword()));
+				usuariosRepository.save(user);
+			}else {
+				user = null;
+			}//if equals
+		}// if exists
+		return user;
 	}//updateUsuario
 	
 }//class UsuariosService
