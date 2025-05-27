@@ -29,9 +29,9 @@ public class JwtFilter extends GenericFilterBean{
 		//Filtrar por método y URL
 		//httpServletRequest.getMethod()-> GET POST PUT DELETE
 		if(	(("POST".equals(httpServletRequest.getMethod())) &&  
-			(! httpServletRequest.getRequestURI().contains("/api/usuarios/")) )
+			(! httpServletRequest.getRequestURI().contains("/soorot/usuarios/")) )
 			|| (("GET".equals(httpServletRequest.getMethod())) && 
-			(! httpServletRequest.getRequestURI().contains("/api/productos/")) ) 
+			(! httpServletRequest.getRequestURI().contains("/soorot/productos/")) ) 
 			|| ("PUT".equals(httpServletRequest.getMethod()))
 			|| ("DELETE".equals(httpServletRequest.getMethod()))
 		  ){

@@ -66,7 +66,7 @@ public class UsuariosService {
 			return false;
 	}//validateUser
 
-	public Usuario updateUsuario(Long id, ChangePassword changePassword) {
+	public Usuario updateUsuarioPWD(Long id, ChangePassword changePassword) { //Ojo este método solo hace PUT actualiza, la contraseña del usuario
 		Usuario user = null;
 		if (usuariosRepository.existsById(id)) {
 			user = usuariosRepository.findById(id).get();
