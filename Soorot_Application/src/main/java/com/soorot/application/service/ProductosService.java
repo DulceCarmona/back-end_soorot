@@ -2,71 +2,67 @@ package com.soorot.application.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.soorot.application.model.ProductosModel;
+import com.soorot.application.model.Producto;
+import com.soorot.application.repository.ProductosRepository;
 
 @Service
 public class ProductosService {
-	private final List<ProductosModel> lista=new ArrayList<ProductosModel>();
+	
+	private final ProductosRepository productosRepository; 
 	
 	@Autowired
-	public ProductosService() {
-	lista.add(new ProductosModel("Mochila para escalar",Double.valueOf(600.90),"Mochila grande en color azul y verde que se puede replegar dependiendo de lo que necesite","Exploracion","Mochila.jpg"));
-	lista.add(new ProductosModel("Arnes",Double.valueOf(399.99),"Arnes de seguridad para subir montañas", "Escalada","Arnes.jpg"));
-	lista.add(new ProductosModel("Botas para escalar",Double.valueOf(600.50),"Botas para escalar con casquillo cafes","Escalada","Botas.jpg"));
-	lista.add(new ProductosModel("Casco de seguridad", Double.valueOf(753.53), "Casco especial para la cabeza con linterna color rojo", "Alpinismo","Casco.jpg"));
+	public ProductosService(ProductosRepository productosRepository){
+		this.productosRepository=productosRepository;
 	}//constructor
 	
-	public List<ProductosModel> getProducts(){
-		return lista;
-	}//getProducts
-	public ProductosModel getProduct(Long id) {
-		ProductosModel tmp=null;
-		for(ProductosModel producto:lista) {
-			if(producto.getId()==id) {
-				tmp=producto;
-				break;
-			}//if
-		}//foreach
-		return tmp;
-	}//getProduct
+	public List<Producto> getProductos(){
+		return productosRepository.findAll();
+	}//getProductos
+	
+	public Producto getProducto(Long id) {
+		return productosRepository.findById(id).orElseThrow(
+				() -> new IllegalArgumentException("El producto "
+						+ "con el id[" + id
+						+ "] no existe."));  //mensaje solo para la consola
+	}//getProducto
 
-	public ProductosModel deleteProduct(Long id) {
-		ProductosModel tmp=null;
-		for(ProductosModel producto:lista) {
-			if(producto.getId()==id) {
-				tmp=producto;
-				lista.remove(producto);
-				break;
-			}//if
-		}//foreach
+	public Producto deleteProducto(Long id) {
+		Producto tmp=null;
+		if (productosRepository.existsById(id)) {
+			tmp = productosRepository.findById(id).get();
+			productosRepository.deleteById(id);
+		}// if exists
 		return tmp;
-	}//deleteProduct
+	}//deleteProducto
 
-	public ProductosModel addProducto(ProductosModel producto) {
-		lista.add(producto);
+	public Producto addProducto(Producto producto) {
+		Optional<Producto> prod = productosRepository.findByNombre(producto.getNombre());
+		if(prod.isEmpty()) {
+			productosRepository.save(producto);
+		}else  {
+			producto = null;
+		}//isEmpty
 		return producto;
 	}//addProducto
 
-	public ProductosModel updateProduct(Long id, String nombre, Double precio, String descripcion, String categoria, String imagen) {
+	public Producto updateProducto(Long id, String nombre, Double precio, String descripcion, String categoria, String imagen) {
 		// TODO Auto-generated method stub
-		ProductosModel tmp=null;
-		for(ProductosModel producto:lista) {
-			if(producto.getId()==id) {
+		Producto tmp=null;
+			if(productosRepository.existsById(id)) {
+				Producto producto = productosRepository.findById(id).get();
 				if(nombre!=null) producto.setNombre(nombre);
-				if(precio!=null) producto.setPrecio(precio);	
+				if(precio!=null) producto.setPrecio(precio);
 				if(descripcion!=null) producto.setDescripcion(descripcion);
-				if(categoria!=null) producto.setCategoria(categoria);				
-				if(imagen!=null) producto.setImagen(imagen);
-							
+				if(categoria!=null) producto.setCategoria(categoria);
+				if(imagen!=null) producto.setImagen(imagen);							
+				productosRepository.save(producto);		
 				tmp=producto;
-				break;
-			}//if
-		}//foreach
+			}//if	
 		return tmp;
-	}//updateProduct
-	}//class ProductoService
-
+	}//updateProducto
+}//class ProductoService

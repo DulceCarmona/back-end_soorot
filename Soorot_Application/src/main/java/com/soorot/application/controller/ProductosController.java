@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.soorot.application.model.ProductosModel;
+import com.soorot.application.model.Producto;
 import com.soorot.application.service.ProductosService;
 
 
@@ -27,55 +27,37 @@ public class ProductosController {
 	public ProductosController(ProductosService productoService) {
 		this.productoService = productoService;
 	}//ProductController
-
-	
 	
 	@GetMapping
-	public List<ProductosModel> getProductos(){
-		return productoService.getProducts();
+	public List<Producto> getProductos(){
+		return productoService.getProductos();
 	}//getProductos
 	
 	@GetMapping(path="{prodId}")
-	public ProductosModel getProduct(@PathVariable("prodId") Long id) {
-	    return productoService.getProduct(id);
-	}
+	public Producto getProducto(@PathVariable("prodId") Long id) {
+	    return productoService.getProducto(id);
+	}//getProducto
 	
 	@DeleteMapping(path="{prodId}")
-	public ProductosModel deleteProduct(@PathVariable("prodId") Long id) {
-	    return productoService.deleteProduct(id);
-	}
+	public Producto deleteProducto(@PathVariable("prodId") Long id) {
+	    return productoService.deleteProducto(id);
+	}//deleteProducto
 	
 	@PostMapping
-	public ProductosModel addProducto(@RequestBody ProductosModel producto) {
+	public Producto addProducto(@RequestBody Producto producto) {
 		return productoService.addProducto(producto);
-	}
-	
-//	@PutMapping(path="{prodId}")
-//	public ProductosModel updateProduct(
-//			@PathVariable("prodId")Long id,
-//			@RequestParam(required=false) String nombre,
-//			@RequestParam(required=false) Double precio,
-//			@RequestParam(required=false) String descripcion,
-//			@RequestParam(required=false) String categoria,
-//			@RequestParam(required=false) String imagen){
-//			
-//		return productoService.updateProduct(id, nombre,precio, descripcion,categoria, imagen);
-//	}//updateProducto
-	
-	
-	//Solicitamos asistencia porque no pudimos lograr el metodo put con el código visto en clase (bloque de arriba)
-	//En las otras tablas si fue posible correrlo con el código de arriba Atte: Uriel Medina
+	}//addProducto
+			
 	@PutMapping(path="{prodId}")
-	public ProductosModel updateProduct(
-	    @PathVariable("prodId") Long id,
-	    @RequestParam(name="nombre", required=false) String nombre,
-	    @RequestParam(name="precio", required=false) Double precio,
-	    @RequestParam(name="descripcion", required=false) String descripcion,
-	    @RequestParam(name="categoria", required=false) String categoria,
-	    @RequestParam(name="imagen", required=false) String imagen
-	){
-	    return productoService.updateProduct(id, nombre, precio, descripcion, categoria, imagen);
-	}
-
+	public Producto updateProducto(
+		    @PathVariable("prodId") Long id,
+		    @RequestParam(required=false) String nombre,
+		    @RequestParam(required=false) Double precio,
+		    @RequestParam(required=false) String descripcion,
+		    @RequestParam(required=false) String categoria,
+		    @RequestParam(required=false) String imagen){
+	    return productoService.updateProducto(id, nombre, precio, descripcion, categoria, imagen);
+	}//updateProducto
+    //@RequestParam(name="imagen", required=false) String imagen
 	
 }//ClassController
