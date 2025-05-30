@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.containsString;
 @SpringBootTest
 @AutoConfigureMockMvc
 class SoorotApplicationTests {
-	private final String token = "Bearer: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWNlbF82YkBvdXRsb29rLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4Mjg3NzEzLCJleHAiOjE3NDgzNzQxMTN9.bg4EGv1keXODiuvTQ7ZJcTdABiaJ0vFgWBL7rVJHkFU" ;
+	private final String token = "Bearer: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWNlbC42YkBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODYyMjg3NiwiZXhwIjoxNzQ4NzA5Mjc2fQ.oHzYYI1vi8XyU2SBM_hUjdu3k2rtbJrbZdt4w3O9XoM" ;
 	@Autowired
 	private MockMvc mockMvc; // punto de partida para probar los métodos
 	
@@ -72,7 +72,7 @@ class SoorotApplicationTests {
 	@Test
 	@DisplayName("Se prueba crear un usuario con POST en el endpoint http://localhost:8080/soorot/usuarios/14")
 	void pruebaPOSTUsuario() throws Exception{
-		Usuario u = new Usuario("IntegranteExtra2", "extra2_extra@gmail.com", "contra123", "5542454748");
+		Usuario u = new Usuario("IntegranteExtra2", "extra2_extrmmma@gmail.com", "contra123", "5542454748");
 		
 		this.mockMvc.perform(post("/soorot/usuarios/")
 				.contentType(MediaType.APPLICATION_JSON)
